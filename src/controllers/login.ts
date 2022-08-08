@@ -15,13 +15,14 @@ export default class LoginController {
   public async getUser(req: Request, res: Response) {
     const { body: { username, password } } = req;
     const user = await this.loginService.getUser({ username, password });
+    console.log(user);    
     
     if (user === undefined) {
-      return res.status(401).json({ error: 'Username or password invalid' });
+      return res.status(401).json({ message: 'Username or password invalid' });
     } 
 
     if (user.password !== password) {
-      return res.status(401).json({ error: 'Username or password invalid' });
+      return res.status(401).json({ message: 'Username or password invalid' });
     }
     const token = jwt.sign({ username, id: user.id }, SECRET);    
     return res.status(200).json({ token });
