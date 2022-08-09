@@ -32,16 +32,17 @@ export default class ProductValidate {
   }
 
   static productValidate(req: Request, res: Response, next: NextFunction) {
-    const { products } = req.body;
-    if (!products) {
-      return res.status(400).json({ message: 'Products is required' });
+    const { productsIds } = req.body;
+    
+    if (!productsIds) {
+      return res.status(400).json({ message: '"productsIds" is required' });
     }
-    if (!(Array.isArray(products))) {
-      return res.status(422).json({ message: 'Products must be an array of numbers' });
+    if (!(Array.isArray(productsIds))) {
+      return res.status(422).json({ message: '\"productsIds\" must be an array' });
     }
 
-    if (products.length === 0) {
-      return res.status(422).json({ message: 'Products can\'t be empty' });
+    if (productsIds.length === 0) {
+      return res.status(422).json({ message: '\"productsIds\" must include only numbers' });
     }
     next();
   }
