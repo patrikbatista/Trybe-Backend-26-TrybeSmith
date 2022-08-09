@@ -13,12 +13,12 @@ export default class ProductsController {
   public async getAll(_req: Request, res: Response): Promise<Response> {
     const orders = await this.orderService.getAll();
 
-    const newOrders = orders.map((order) => ({ 
-      ...order, products: [order.products],
-    }));
+    // const newOrders = orders.map((order) => ({ 
+    //   ...order, productsIds: [order.products],
+    // }));
 
-    if (newOrders.length > 0) {
-      return res.status(200).json(newOrders);
+    if (orders.length > 0) {
+      return res.status(200).json(orders);
     } 
     const newError = new Error('not found');
     newError.name = '500';
@@ -26,12 +26,13 @@ export default class ProductsController {
   }
 
   public async create(req: Request, res: Response): Promise<Response> {
-    const { products, user } = req.body;
+    const { productsIds, user } = req.body;
+    
     const { id } = user;
-    const orders = await this.orderService.create({ userId: id, products });
-
+    const orders = await this.orderService.create({ userId: id, products: productsIds });
+    
     if (orders) {
-      return res.status(201).json({ order: { ...orders } });
+      return res.status(201).json({ userId: orders.userId, productsIds: orders.products });
     } 
     const newError = new Error('internal error');
     newError.name = '500';
