@@ -14,8 +14,7 @@ export default class LoginController {
 
   public async getUser(req: Request, res: Response) {
     const { body: { username, password } } = req;
-    const user = await this.loginService.getUser({ username, password });
-    console.log(user);    
+    const user = await this.loginService.getUser({ username, password });   
     
     if (user === undefined) {
       return res.status(401).json({ message: 'Username or password invalid' });
