@@ -8,12 +8,15 @@ export default class OrderModel {
     this.connection = connection;
   }
 
+  // https://dev.mysql.com/doc/refman/5.7/en/aggregate-functions.html#function_json-arrayagg
   public async getAll(): Promise<Order[]> {
     const result = await this.connection.execute(
-      `SELECT Orders.id as id, Orders.userId as userId, Products.id as products 
-      FROM Trybesmith.Orders
-      INNER JOIN Trybesmith.Products 
-      ON Trybesmith.Orders.id = Trybesmith.Products.OrderId;`,
+      `SELECT ord.id as id, ord.userId as userId, JSON_ARRAYAGG(prod.id) as productsIds
+      FROM Trybesmith.Orders as ord
+      INNER JOIN Trybesmith.Products as prod
+      ON ord.id = prod.orderId 
+      GROUP BY ord.id
+      ORDER BY ord.userId;`,
     );
     const [rows] = result;
     return rows as Order[];
