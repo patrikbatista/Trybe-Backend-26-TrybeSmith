@@ -25,7 +25,7 @@ export default class ProductsController {
     
     const newProduct = await this.productService.create({ name, amount });
     if (newProduct) {
-      return res.status(201).json({ item: newProduct });
+      return res.status(201).json(newProduct);
     }
     const newError = new Error('not found');
     newError.name = '500';
